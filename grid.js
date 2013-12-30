@@ -1,10 +1,3 @@
-function Random() {
-}
-
-Random.random = function(max) {
-	return Math.floor(Math.random() * max + 1)
-}
-
 function Grid(width, height) {
 
 	this.width = width
@@ -45,12 +38,12 @@ Direction.ALL = [ Direction.NORTH, Direction.NORTHEAST, Direction.EAST,
 		Direction.WEST, Direction.NORTHWEST ]
 
 Direction.randomDirection = function() {
-	return Direction.ALL[Random.random(7)]
+	return Direction.ALL[randomInt(7)]
 }
 
 Grid.prototype.randomCell = function() {
-	x = Random.random(this.width) - 1
-	y = Random.random(this.width) - 1
+	x = randomInt(this.width) - 1
+	y = randomInt(this.width) - 1
 	return this.getCell(x, y)
 }
 
@@ -99,11 +92,15 @@ Cell.prototype.toString = function() {
 }
 
 Cell.prototype.randomNeighbour = function() {
-	return this.neighbours[Random.random(8)]
+	return this.neighbours[randomInt(8)]
 }
 
 Cell.prototype.eachNeighbour = function(f) {
 	for ( var i = 0; i < 8; i++) {
 		f(this.neighbours[i])
 	}
+}
+
+function randomInt(max) {
+	return Math.floor(Math.random() * max + 1)
 }
