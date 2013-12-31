@@ -1,4 +1,4 @@
-/*global GridDisplay,Grid,console,Color*/
+/*global GridDisplay,Grid,Loop,Color*/
 /*jslint sloppy: true */
 /*jslint browser:true */
 /*jslint plusplus: true */
@@ -75,12 +75,9 @@ function draw() {
 
 }
 
-function loop() {
-    setTimeout(function () {
-        draw();
-        updateStats();
-        loop();
-    }, delay);
-}
+var loop = new Loop(delay, function () {
+    draw();
+    updateStats();
+});
 
-loop();
+loop.start();

@@ -11,6 +11,11 @@ Color.WHITE = "#FFFFFF";
 Color.YELLOW = "#FFFF00";
 Color.PURPLE = "#FF00FF";
 
+Color.randomColor = function () {
+    // From http://www.paulirish.com/2009/random-hex-color-code-snippets/
+    return '#' + Math.floor(Math.random() * 16777215).toString(16);
+};
+
 function GridDisplay(cellsize, width, height) {
     this.cellsize = cellsize;
     this.width = width;
@@ -19,23 +24,7 @@ function GridDisplay(cellsize, width, height) {
     this.canvas.setAttribute("width", (cellsize * width).toString());
     this.canvas.setAttribute("height", (cellsize * height).toString());
     this.context = this.canvas.getContext('2d');
-    //        this.initKeyHandlers();
 }
-
-//function initKeyHandlers() {
-//        window.onkeyup = function(e) {
-//            var key = e.keyCode ? e.keyCode : e.which;
-//            if (key == 32) { // Space
-//                this.gridLab.toggleLooping();
-//            }
-//            if (key == 38) { // Up arrow
-//                this.gridLab.loopInterval = Math.min(this.gridLab.loopInterval - 5, 0);
-//            }
-//            if (key == 40) { // Down arrow
-//                this.gridLab.loopInterval += 5;
-//            }
-//        }
-//}
 
 GridDisplay.prototype.clear = function () {
     this.context.fillStyle = Color.BLACK;
@@ -44,13 +33,35 @@ GridDisplay.prototype.clear = function () {
 
 GridDisplay.prototype.square = function (x, y, color) {
     this.context.fillStyle = color;
-    //console.log('Filling ' + color + ' at  ' + x + ',' + y)
     this.context.fillRect(x * this.cellsize, y * this.cellsize, this.cellsize, this.cellsize);
 };
 
+function Loop(delay, loopFunction) {
+    this.delay = delay;
+    this.bindKeys();
+    this.looping = true;
+    this.loopFunction = loopFunction;
+}
 
+Loop.prototype.bindKeys = function () {
+    window.onkeyup = function (e) {
+        var key = e.keyCode || e.which;
+        if (key === 32) { // Space
+            this.looping = !this.looping;
+        }
+        if (key === 38) { // Up arrow
+            this.delay = Math.min(this.delay - 5, 0);
+        }
+        if (key === 40) { // Down arrow
+            this.delay += 5;
+        }
+    };
+};
 
-Color.randomColor = function () {
-    // From http://www.paulirish.com/2009/random-hex-color-code-snippets/
-    return '#' + Math.floor(Math.random() * 16777215).toString(16);
+Loop.prototype.start = function () {
+    var loop = this;
+    setTimeout(function () {
+        loop.loopFunction();
+        loop.start();
+    }, this.delay);
 };
