@@ -1,3 +1,16 @@
+/*jslint browser:true */
+/*jslint sloppy: true */
+
+function Color() {}
+
+Color.RED = "#FF0000";
+Color.GREEN = "#00FF00";
+Color.BLUE = "#0000FF";
+Color.BLACK = "#000000";
+Color.WHITE = "#FFFFFF";
+Color.YELLOW = "#FFFF00";
+Color.PURPLE = "#FF00FF";
+
 function GridDisplay(cellsize, width, height) {
     this.cellsize = cellsize;
     this.width = width;
@@ -27,25 +40,17 @@ function GridDisplay(cellsize, width, height) {
 GridDisplay.prototype.clear = function () {
     this.context.fillStyle = Color.BLACK;
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-}
+};
 
 GridDisplay.prototype.square = function (x, y, color) {
     this.context.fillStyle = color;
     //console.log('Filling ' + color + ' at  ' + x + ',' + y)
-    this.context.fillRect(x*this.cellsize, y*this.cellsize, cellsize, cellsize);
-}
+    this.context.fillRect(x * this.cellsize, y * this.cellsize, this.cellsize, this.cellsize);
+};
 
-function Color() {};
 
-Color.RED = "#FF0000";
-Color.GREEN = "#00FF00";
-Color.BLUE = "#0000FF";
-Color.BLACK = "#000000";
-Color.WHITE = "#FFFFFF";
-Color.YELLOW = "#FFFF00";
-Color.PURPLE = "#FF00FF";
 
-Color.randomColor = function() {
+Color.randomColor = function () {
     // From http://www.paulirish.com/2009/random-hex-color-code-snippets/
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
-}
+};
