@@ -36,6 +36,7 @@ GridDisplay.prototype.square = function (x, y, color) {
     this.context.fillRect(x * this.cellsize, y * this.cellsize, this.cellsize, this.cellsize);
 };
 
+
 function Loop(delay, loopFunction) {
     this.delay = delay;
     this.bindKeys();
@@ -44,10 +45,11 @@ function Loop(delay, loopFunction) {
 }
 
 Loop.prototype.bindKeys = function () {
+    var loop = this;
     window.onkeyup = function (e) {
         var key = e.keyCode || e.which;
         if (key === 32) { // Space
-            this.looping = !this.looping;
+            loop.toggleLooping();
         }
         if (key === 38) { // Up arrow
             this.delay = Math.min(this.delay - 5, 0);
@@ -58,10 +60,19 @@ Loop.prototype.bindKeys = function () {
     };
 };
 
+Loop.prototype.toggleLooping = function () {
+    this.looping = !this.looping;
+    if (this.looping) {
+        this.start();
+    }
+};
+
 Loop.prototype.start = function () {
     var loop = this;
     setTimeout(function () {
         loop.loopFunction();
-        loop.start();
+        if (loop.looping) {
+            loop.start();
+        }
     }, this.delay);
 };
