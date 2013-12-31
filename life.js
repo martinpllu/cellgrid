@@ -24,6 +24,7 @@ grid.eachCell(function (cell, x, y) {
 
 var generation = 0;
 var firstFrameTimestamp = new Date().getTime();
+var info = document.getElementById('info');
 
 function updateStats() {
     generation++;
@@ -33,7 +34,7 @@ function updateStats() {
     averageTimeMillis = elapsed / generation;
     averageFps = 1000 / averageTimeMillis;
     if (generation % 10 === 0) {
-        console.log(averageFps.toFixed(2));
+        info.innerHTML = 'Frames/sec: ' + averageFps.toFixed(2);
     }
 }
 
