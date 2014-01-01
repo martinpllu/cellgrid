@@ -5,20 +5,20 @@ function randomInt(max) {
     return Math.floor(Math.random() * max + 1);
 }
 
-function Direction(x, y) {
+function Direction(x, y, index) {
     this.x = x;
     this.y = y;
+    this.index = index;
 }
 
-Direction.NONE = new Direction(0, 0);
-Direction.NORTH = new Direction(0, 1);
-Direction.NORTHEAST = new Direction(1, 1);
-Direction.EAST = new Direction(1, 0);
-Direction.SOUTHEAST = new Direction(1, -1);
-Direction.SOUTH = new Direction(0, -1);
-Direction.SOUTHWEST = new Direction(-1, -1);
-Direction.WEST = new Direction(-1, 0);
-Direction.NORTHWEST = new Direction(-1, 1);
+Direction.NORTH = new Direction(0, 1, 0);
+Direction.NORTHEAST = new Direction(1, 1, 1);
+Direction.EAST = new Direction(1, 0, 2);
+Direction.SOUTHEAST = new Direction(1, -1, 3);
+Direction.SOUTH = new Direction(0, -1, 4);
+Direction.SOUTHWEST = new Direction(-1, -1, 5);
+Direction.WEST = new Direction(-1, 0, 6);
+Direction.NORTHWEST = new Direction(-1, 1, 7);
 
 Direction.ALL = [
     Direction.NORTH,
@@ -62,13 +62,20 @@ Cell.prototype.initNeighbours = function () {
     }
 };
 
+
+
 Cell.prototype.toString = function () {
-    return this.x + ',' + this.y;
+    return "(" + this.x + ',' + this.y + ")";
 };
 
 Cell.prototype.randomNeighbour = function () {
     return this.neighbours[randomInt(8)];
 };
+
+Cell.prototype.neighbour = function (direction) {
+    return this.neighbours[direction.index];
+};
+
 
 Cell.prototype.eachNeighbour = function (f) {
     var i;
