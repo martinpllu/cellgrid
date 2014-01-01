@@ -5,20 +5,21 @@ function randomInt(upToButExcluding) {
     return Math.floor(Math.random() * upToButExcluding);
 }
 
-function Direction(x, y, index) {
+function Direction(x, y, index, id) {
     this.x = x;
     this.y = y;
     this.index = index;
+    this.id = id;
 }
 
-Direction.NORTH = new Direction(0, 1, 0);
-Direction.NORTHEAST = new Direction(1, 1, 1);
-Direction.EAST = new Direction(1, 0, 2);
-Direction.SOUTHEAST = new Direction(1, -1, 3);
-Direction.SOUTH = new Direction(0, -1, 4);
-Direction.SOUTHWEST = new Direction(-1, -1, 5);
-Direction.WEST = new Direction(-1, 0, 6);
-Direction.NORTHWEST = new Direction(-1, 1, 7);
+Direction.NORTH = new Direction(0, 1, 0, "NORTH");
+Direction.NORTHEAST = new Direction(1, 1, 1, "NORTHEAST");
+Direction.EAST = new Direction(1, 0, 2, "EAST");
+Direction.SOUTHEAST = new Direction(1, -1, 3, "SOUTHEAST");
+Direction.SOUTH = new Direction(0, -1, 4, "SOUTH");
+Direction.SOUTHWEST = new Direction(-1, -1, 5, "SOUTHWEST");
+Direction.WEST = new Direction(-1, 0, 6, "WEST");
+Direction.NORTHWEST = new Direction(-1, 1, 7, "NORTHWEST");
 
 Direction.ALL = [
     Direction.NORTH,
@@ -31,7 +32,7 @@ Direction.ALL = [
     Direction.NORTHWEST];
 
 Direction.randomDirection = function () {
-    return Direction.ALL[randomInt(7)];
+    return Direction.ALL[randomInt(8)];
 };
 
 function Cell(grid, x, y) {
