@@ -1,8 +1,8 @@
 /*jslint plusplus: true */
 /*jslint sloppy: true */
 
-function randomInt(max) {
-    return Math.floor(Math.random() * max + 1);
+function randomInt(upToButExcluding) {
+    return Math.floor(Math.random() * upToButExcluding);
 }
 
 function Direction(x, y, index) {
@@ -104,8 +104,8 @@ function Grid(width, height) {
 }
 
 Grid.prototype.randomCell = function () {
-    var x = randomInt(this.width) - 1,
-        y = randomInt(this.height) - 1;
+    var x = randomInt(this.width),
+        y = randomInt(this.height);
     return this.getCell(x, y);
 };
 
