@@ -1,27 +1,27 @@
-/*global GridDisplay,Grid,Loop,Color,Direction,test,equal,ok,randomInt,deepEqual,js_cols*/
+/*global GridDisplay,Grid,Loop,Color,Direction,test,equal,ok,randomInt,deepEqual,expect,js_cols,console*/
 /*jslint sloppy: true */
 /*jslint browser:true */
 /*jslint plusplus: true */
 
-// For testing the output of random functions
-function generateAndCheckEqual(iterations, targetArray, generatorFunction) {
+// For testing that random functions produce the expected set of values given enough iterations
+function expectedValuesGenerated(iterations, expectedValues, generatorFunction) {
     var generated = new js_cols.HashSet(),
-        targetSet = new js_cols.HashSet(targetArray),
+        targetSet = new js_cols.HashSet(expectedValues),
         i;
     for (i = 0; i < iterations; i++) {
         generated.insert(generatorFunction());
     }
-    ok(targetSet.equals(generated), "Expected " + targetArray + " to be generated after " + i + " iterations, saw " + generated.getValues());
+    ok(targetSet.equals(generated), "Expected " + expectedValues + " to be generated after " + i + " iterations, saw " + generated.getValues());
 }
 
 test("randomInt", function () {
-    generateAndCheckEqual(1000, [0, 1, 2, 3, 4], function () {
+    expectedValuesGenerated(1000, [0, 1, 2, 3, 4], function () {
         return randomInt(5);
     });
 });
 
 test("direction:randomDirection", function () {
-    generateAndCheckEqual(1000, [0, 1, 2, 3, 4, 5, 6, 7], function () {
+    expectedValuesGenerated(1000, [0, 1, 2, 3, 4, 5, 6, 7], function () {
         return Direction.randomDirection().index;
     });
 });
@@ -42,7 +42,7 @@ test("grid:getCell", function () {
 });
 
 function testRandomCell(grid, targetArray) {
-    generateAndCheckEqual(1000, targetArray, function () {
+    expectedValuesGenerated(1000, targetArray, function () {
         return grid.randomCell().toString();
     });
 }
@@ -79,11 +79,10 @@ test("cell:randomNeighbour", function () {
     var grid = new Grid(8, 8),
         edgeCell = grid.getCell(0, 4),
         target = ["(0,5)", "(1,5)", "(1,4)", "(1,3)", "(0,3)", "(7,3)", "(7,4)", "(7,5)"];
-    generateAndCheckEqual(1000, target, function () {
+    expectedValuesGenerated(1000, target, function () {
         return edgeCell.randomNeighbour().toString();
     });
-})
-
+});
 
 test("cell:eachNeighbour", function () {
     var coords = "",
@@ -93,4 +92,20 @@ test("cell:eachNeighbour", function () {
         coords += n;
     });
     equal(coords, "(0,5)(1,5)(1,4)(1,3)(0,3)(7,3)(7,4)(7,5)");
+});
+
+test("grid:bigTest", function () {
+    var size = 1000,
+        constructionStartTime = new Date().getTime(),
+        grid = new Grid(size, size),
+        constructionTime = new Date().getTime() - constructionStartTime,
+        iterateStartTime,
+        iterateTime;
+    ok(true, constructionTime + "ms to build " + size + "x" + size + " grid");
+    iterateStartTime = new Date().getTime();
+    grid.eachCell(function (cell) {
+        cell.eachNeighbour(function () {});
+    });
+    iterateTime = new Date().getTime() - iterateStartTime;
+    ok(true, iterateTime + "ms to iterate over all cells, getting neighbours");
 });
