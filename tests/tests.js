@@ -3,28 +3,27 @@
 /*jslint browser:true */
 /*jslint plusplus: true */
 
-test("randomInt", function () {
-    var i, n,
-        results = [0, 0, 0, 0, 0];
-    for (i = 0; i < 1000; i++) {
-        n = randomInt(5);
-        results[n] = 1;
+// For testing the output of random functions
+function generateAndCheckEqual(iterations, targetArray, generatorFunction) {
+    var generated = new js_cols.HashSet(),
+        targetSet = new js_cols.HashSet(targetArray),
+        i;
+    for (i = 0; i < iterations; i++) {
+        generated.insert(generatorFunction());
     }
-    deepEqual(results, [1, 1, 1, 1, 1]);
+    ok(targetSet.equals(generated), "Expected " + targetArray + " to be generated after " + i + " iterations, saw " + generated.getValues());
+}
+
+test("randomInt", function () {
+    generateAndCheckEqual(1000, [0, 1, 2, 3, 4], function () {
+        return randomInt(5);
+    });
 });
 
-
 test("direction:randomDirection", function () {
-    var target = new js_cols.HashSet([0, 1, 2, 3, 4, 5, 6, 7]),
-        generated = new js_cols.HashSet(),
-        i = 0,
-        dir,
-        maxTries = 1000;
-    while (i < maxTries && !target.equals(generated)) {
-        generated.insert(Direction.randomDirection().index);
-        console.log(generated.getValues());
-    }
-    ok(target.equals(generated));
+    generateAndCheckEqual(1000, [0, 1, 2, 3, 4, 5, 6, 7], function () {
+        return Direction.randomDirection().index;
+    });
 });
 
 test("grid:eachCell", function () {
@@ -42,38 +41,17 @@ test("grid:getCell", function () {
     equal(cell.toString(), "(1,0)");
 });
 
-function testRandomCell(grid) {
-    var i, cell;
-    for (i = 0; i < 100; i++) {
-        cell = grid.randomCell();
-        ok(cell.x >= 0 && cell.x <= grid.width);
-        ok(cell.y >= 0 && cell.y <= grid.height);
-        // TODO test that all the cells are covered
-        // ... keep going until all are found
-    }
-}
-
-
-
-
-function keepGoingUntilAllGenerated(target, maxTries, generatorFunction) {
-    var tries = 0,
-        maxTries,
-        result;
-    while (tries < maxTries) {
-        if (target == result) {
-            break;
-        }
-        result = generatorFunction();
-
-    }
+function testRandomCell(grid, targetArray) {
+    generateAndCheckEqual(1000, targetArray, function () {
+        return grid.randomCell().toString();
+    });
 }
 
 test("grid:randomCell", function () {
-    var tallGrid = new Grid(2, 10),
-        longGrid = new Grid(10, 2);
-    testRandomCell(longGrid);
-    testRandomCell(tallGrid);
+    var tallGrid = new Grid(2, 1),
+        longGrid = new Grid(1, 2);
+    testRandomCell(longGrid, ["(0,0)", "(0,1)"]);
+    testRandomCell(tallGrid, ["(0,0)", "(1,0)"]);
 });
 
 test("cell:neighbours", function () {
