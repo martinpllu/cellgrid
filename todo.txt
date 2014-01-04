@@ -21,4 +21,33 @@ cell-grid
 
 594ms to build 1000x1000 grid
 15ms to iterate over all cells, getting neighbours
-33.61ms average tick time over 1 500x500 samples of 100 ticks each (29.75 frames/sec)
+
+565ms to build 1000x1000 grid
+19ms to iterate over all cells, getting neighbours
+
+561ms to build 1000x1000 grid
+15ms to iterate over all cells, getting neighbours
+
+
+Before life perf improvements:
+
+    33.61ms average tick time over 1 500x500 samples of 100 ticks each (29.75 frames/sec)
+    34.36ms average tick time over 1 500x500 samples of 100 ticks each (29.10 frames/sec)
+    
+After making the main eachCell loop a for loop:
+    
+    30.90ms average tick time over 1 500x500 samples of 100 ticks each (32.36 frames/sec)
+    31.20ms average tick time over 1 500x500 samples of 100 ticks each (32.05 frames/sec)
+    30.51ms average tick time over 1 500x500 samples of 100 ticks each (32.78 frames/sec)
+    
+    
+After making eachNeighbour loop a for loop:
+
+    10.79ms average tick time over 1 500x500 samples of 100 ticks each (92.68 frames/sec)
+    9.87ms average tick time over 1 500x500 samples of 100 ticks each (101.32 frames/sec)
+    10.14ms average tick time over 1 500x500 samples of 100 ticks each (98.62 frames/sec)
+    
+    Also ran fast in the GUI from the start!!!!
+    
+
+
