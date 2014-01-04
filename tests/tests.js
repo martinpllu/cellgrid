@@ -96,32 +96,32 @@ test("cell:eachNeighbour", function () {
     equal(coords, "(0,5)(1,5)(1,4)(1,3)(0,3)(7,3)(7,4)(7,5)");
 });
 
-//test("grid:bigTest", function () {
-//    var size = 1000,
-//        constructionStartTime = new Date().getTime(),
-//        grid = new Grid(size, size),
-//        constructionTime = new Date().getTime() - constructionStartTime,
-//        iterateStartTime,
-//        iterateTime,
-//        x,
-//        y,
-//        i,
-//        cell,
-//        neighbour;
-//    ok(true, constructionTime + "ms to build " + size + "x" + size + " grid");
-//    iterateStartTime = new Date().getTime();
-//
-//    for (x = 0; x < grid.width; x++) {
-//        for (y = 0; y < grid.height; y++) {
-//            cell = grid.cells[x][y];
-//            for (i = 0; i < 8; i++) {
-//                neighbour = cell.neighbours[i];
-//            }
-//        }
-//    }
-//    iterateTime = new Date().getTime() - iterateStartTime;
-//    ok(true, iterateTime + "ms to iterate over all cells, getting neighbours");
-//});
+test("perf:grid:bigTest", function () {
+    var size = 1000,
+        constructionStartTime = new Date().getTime(),
+        grid = new Grid(size, size),
+        constructionTime = new Date().getTime() - constructionStartTime,
+        iterateStartTime,
+        iterateTime,
+        x,
+        y,
+        i,
+        cell,
+        neighbour;
+    ok(true, constructionTime + "ms to build " + size + "x" + size + " grid");
+    iterateStartTime = new Date().getTime();
+
+    for (x = 0; x < grid.width; x++) {
+        for (y = 0; y < grid.height; y++) {
+            cell = grid.cells[x][y];
+            for (i = 0; i < 8; i++) {
+                neighbour = cell.neighbours[i];
+            }
+        }
+    }
+    iterateTime = new Date().getTime() - iterateStartTime;
+    ok(true, iterateTime + "ms to iterate over all cells, getting neighbours");
+});
 
 function sampleElapsedTime(numSamples, sampleFunction) {
     var i,
@@ -133,6 +133,8 @@ function sampleElapsedTime(numSamples, sampleFunction) {
     elapsedTime = new Date().getTime() - startTime;
     return elapsedTime / numSamples;
 }
+
+
 
 
 function lifeFrameRateTest(size, numTicks) {
@@ -148,7 +150,7 @@ function lifeFrameRateTest(size, numTicks) {
     return elapsedTime / numTicks;
 }
 
-test("grid:lifeFrameRateTest", function () {
+test("perf:grid:lifeFrameRateTest", function () {
     var numSamples = 1,
         numTicksPerSample = 100,
         size = 500,

@@ -2,6 +2,8 @@
 - refactor life so it can be used as a performance test - how many frames/s can it run at?
 - small grids - should the cell be a neighbour of itself?
 
+
+
 Pathfinding project
     https://github.com/qiao/PathFinding.js
     
@@ -17,11 +19,6 @@ cell-grid
 
 
 
-620ms to build 1000x1000 grid
-162ms to iterate over all cells, getting neighbours
-
-560ms to build 1000x1000 grid
-111ms to iterate over all cells, getting neighbours
-
-692ms to build 1000x1000 grid
-108ms to iterate over all cells, getting neighbours
+594ms to build 1000x1000 grid
+15ms to iterate over all cells, getting neighbours
+33.61ms average tick time over 1 500x500 samples of 100 ticks each (29.75 frames/sec)
