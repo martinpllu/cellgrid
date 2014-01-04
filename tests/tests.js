@@ -28,15 +28,6 @@ test("direction:randomDirection", function () {
     });
 });
 
-test("grid:eachCell", function () {
-    var coords = "",
-        grid = new Grid(2, 2);
-    grid.eachCell(function (c) {
-        coords += c;
-    });
-    equal(coords, "(0,0)(0,1)(1,0)(1,1)");
-});
-
 test("grid:getCell", function () {
     var grid = new Grid(2, 2),
         cell = grid.getCell(1, 0);
@@ -84,16 +75,6 @@ test("cell:randomNeighbour", function () {
     expectedValuesGenerated(1000, target, function () {
         return edgeCell.randomNeighbour().toString();
     });
-});
-
-test("cell:eachNeighbour", function () {
-    var coords = "",
-        grid = new Grid(8, 8),
-        edgeCell = grid.getCell(0, 4);
-    edgeCell.eachNeighbour(function (n) {
-        coords += n;
-    });
-    equal(coords, "(0,5)(1,5)(1,4)(1,3)(0,3)(7,3)(7,4)(7,5)");
 });
 
 test("perf:grid:bigTest", function () {

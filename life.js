@@ -9,11 +9,16 @@ function Life(width, height) {
 }
 
 Life.prototype.init = function () {
-    this.grid.eachCell(function (cell, x, y) {
-        var initState = Math.round(Math.random());
-        cell.state = initState;
-        cell.initial = initState;
-    });
+    var cell,
+        initState,
+        x,
+        y;
+    for (x = 0; x < this.grid.width; x++) {
+        for (y = 0; y < this.grid.height; y++) {
+            cell = this.grid.cells[x][y];
+            cell.state = Math.round(Math.random());
+        }
+    }
 };
 
 Life.prototype.tick = function () {

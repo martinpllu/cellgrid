@@ -75,13 +75,6 @@ Cell.prototype.neighbour = function (direction) {
     return this.neighbours[direction.index];
 };
 
-Cell.prototype.eachNeighbour = function (f) {
-    var i;
-    for (i = 0; i < 8; i++) {
-        f(this.neighbours[i]);
-    }
-};
-
 function Grid(width, height) {
 
     var x, y, column;
@@ -99,9 +92,11 @@ function Grid(width, height) {
             this.cells[x][y] = new Cell(this, x, y);
         }
     }
-    this.eachCell(function (cell) {
-        cell.initNeighbours();
-    });
+    for (x = 0; x < this.width; x++) {
+        for (y = 0; y < this.height; y++) {
+            this.cells[x][y].initNeighbours();
+        }
+    }
 }
 
 Grid.prototype.randomCell = function () {
@@ -112,14 +107,4 @@ Grid.prototype.randomCell = function () {
 
 Grid.prototype.getCell = function (x, y) {
     return this.cells[x][y];
-};
-
-Grid.prototype.eachCell = function (f) {
-    var x, y, cell;
-    for (x = 0; x < this.width; x++) {
-        for (y = 0; y < this.height; y++) {
-            cell = this.cells[x][y];
-            f(cell, x, y);
-        }
-    }
 };
