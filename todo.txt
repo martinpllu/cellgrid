@@ -1,8 +1,4 @@
-- why is setTimeout needed in loop?
-- refactor life so it can be used as a performance test - how many frames/s can it run at?
 - small grids - should the cell be a neighbour of itself?
-
-
 
 Pathfinding project
     https://github.com/qiao/PathFinding.js
@@ -10,13 +6,6 @@ Pathfinding project
     http://www.giderosmobile.com/forum/discussion/1081/jumper-very-fast-pathfinder-for-2d-grid-based-games
     
     http://stackoverflow.com/questions/17128965/what-is-a-good-2d-grid-based-path-finding-algorithm
-
-
-cell-fu
-
-
-cell-grid
-
 
 
 594ms to build 1000x1000 grid
