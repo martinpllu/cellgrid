@@ -1,7 +1,9 @@
-/*global GridDisplay,Grid,Loop,Color,Direction,test,equal,ok,randomInt,deepEqual,expect,js_cols,console*/
+/*global GridDisplay,Grid,Loop,Color,Direction,Life,test,equal,ok,randomInt,deepEqual,expect,js_cols,console,QUnit*/
 /*jslint sloppy: true */
 /*jslint browser:true */
 /*jslint plusplus: true */
+
+QUnit.config.testTimeout = 100000;
 
 // For testing that random functions produce the expected set of values given enough iterations
 function expectedValuesGenerated(iterations, expectedValues, generatorFunction) {
@@ -94,18 +96,71 @@ test("cell:eachNeighbour", function () {
     equal(coords, "(0,5)(1,5)(1,4)(1,3)(0,3)(7,3)(7,4)(7,5)");
 });
 
-test("grid:bigTest", function () {
-    var size = 1000,
-        constructionStartTime = new Date().getTime(),
-        grid = new Grid(size, size),
-        constructionTime = new Date().getTime() - constructionStartTime,
-        iterateStartTime,
-        iterateTime;
-    ok(true, constructionTime + "ms to build " + size + "x" + size + " grid");
-    iterateStartTime = new Date().getTime();
-    grid.eachCell(function (cell) {
-        cell.eachNeighbour(function () {});
-    });
-    iterateTime = new Date().getTime() - iterateStartTime;
-    ok(true, iterateTime + "ms to iterate over all cells, getting neighbours");
+//test("grid:bigTest", function () {
+//    var size = 1000,
+//        constructionStartTime = new Date().getTime(),
+//        grid = new Grid(size, size),
+//        constructionTime = new Date().getTime() - constructionStartTime,
+//        iterateStartTime,
+//        iterateTime,
+//        x,
+//        y,
+//        i,
+//        cell,
+//        neighbour;
+//    ok(true, constructionTime + "ms to build " + size + "x" + size + " grid");
+//    iterateStartTime = new Date().getTime();
+//
+//    for (x = 0; x < grid.width; x++) {
+//        for (y = 0; y < grid.height; y++) {
+//            cell = grid.cells[x][y];
+//            for (i = 0; i < 8; i++) {
+//                neighbour = cell.neighbours[i];
+//            }
+//        }
+//    }
+//    iterateTime = new Date().getTime() - iterateStartTime;
+//    ok(true, iterateTime + "ms to iterate over all cells, getting neighbours");
+//});
+
+function sampleElapsedTime(numSamples, sampleFunction) {
+    var i,
+        elapsedTime,
+        startTime = new Date().getTime();
+    for (i = 0; i < numSamples; i++) {
+        sampleFunction();
+    }
+    elapsedTime = new Date().getTime() - startTime;
+    return elapsedTime / numSamples;
+}
+
+
+function lifeFrameRateTest(size, numTicks) {
+    var life = new Life(size, size),
+        i,
+        elapsedTime,
+        startTime = new Date().getTime();
+    life.init();
+    for (i = 0; i < numTicks; i++) {
+        life.tick();
+    }
+    elapsedTime = new Date().getTime() - startTime;
+    return elapsedTime / numTicks;
+}
+
+test("grid:lifeFrameRateTest", function () {
+    var numSamples = 1,
+        numTicksPerSample = 100,
+        size = 500,
+        totalTime = 0,
+        averageTime,
+        fps,
+        i;
+    for (i = 0; i < numSamples; i++) {
+        totalTime += lifeFrameRateTest(500, numTicksPerSample);
+    }
+    averageTime = totalTime / numSamples;
+    fps = 1000 / averageTime;
+
+    ok(true, averageTime.toFixed(2) + "ms average tick time over " + numSamples + " " + size + "x" + size + " samples of " + numTicksPerSample + " ticks each (" + fps.toFixed(2) + " frames/sec)");
 });

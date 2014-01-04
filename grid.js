@@ -118,7 +118,7 @@ Grid.prototype.eachCell = function (f) {
     var x, y, cell;
     for (x = 0; x < this.width; x++) {
         for (y = 0; y < this.height; y++) {
-            cell = this.getCell(x, y);
+            cell = this.cells[x][y];
             f(cell, x, y);
         }
     }

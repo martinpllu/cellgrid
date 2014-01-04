@@ -1,58 +1,25 @@
-/*global GridDisplay,Grid,Loop,Color*/
+/*global Grid*/
 /*jslint sloppy: true */
-/*jslint browser:true */
 /*jslint plusplus: true */
 
-//var width = 100;
-//var height = 100;
-//var cellsize = 5;
-//var delay = 1;
-var width = 500;
-var height = 300;
-var cellsize = 2;
-var delay = 1;
-
-var display = new GridDisplay(cellsize, width, height);
-
-var grid = new Grid(width, height);
-
-grid.eachCell(function (cell, x, y) {
-    var initState = Math.round(Math.random());
-    cell.state = initState;
-    cell.initial = initState;
-});
-
-var generation = 0;
-var firstFrameTimestamp = new Date().getTime();
-var info = document.getElementById('info');
-
-function updateStats() {
-    generation++;
-    var currentTimestamp, elapsed, averageTimeMillis, averageFps;
-    currentTimestamp = new Date().getTime();
-    elapsed = currentTimestamp - firstFrameTimestamp;
-    averageTimeMillis = elapsed / generation;
-    averageFps = 1000 / averageTimeMillis;
-    if (generation % 10 === 0) {
-        info.innerHTML = 'Frames/sec: ' + averageFps.toFixed(2);
-    }
+function Life(width, height) {
+    var x, y;
+    this.grid = new Grid(width, height);
+    this.init();
 }
 
-function liveNeighbours(cell) {
-    var result = 0;
-    cell.eachNeighbour(function (neighbour) {
-        result += neighbour.state;
+Life.prototype.init = function () {
+    this.grid.eachCell(function (cell, x, y) {
+        var initState = Math.round(Math.random());
+        cell.state = initState;
+        cell.initial = initState;
     });
-    return result;
-}
+};
 
-function draw() {
-    display.clear();
-    grid.eachCell(function (cell, x, y) {
-        if (cell.state === 1) {
-            display.square(x, y, Color.GREEN);
-        }
-        var n = liveNeighbours(cell);
+Life.prototype.tick = function () {
+    var life = this;
+    this.grid.eachCell(function (cell, x, y) {
+        var n = life.liveNeighbours(cell);
         if (cell.state === 1) {
             if (n < 2) {
                 cell.nextState = 0;
@@ -69,15 +36,15 @@ function draw() {
             }
         }
     });
-    grid.eachCell(function (cell) {
+    this.grid.eachCell(function (cell) {
         cell.state = cell.nextState;
     });
+};
 
-}
-
-var loop = new Loop(delay, function () {
-    draw();
-    updateStats();
-});
-
-loop.start();
+Life.prototype.liveNeighbours = function (cell) {
+    var result = 0;
+    cell.eachNeighbour(function (neighbour) {
+        result += neighbour.state;
+    });
+    return result;
+};

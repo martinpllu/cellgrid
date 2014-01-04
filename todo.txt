@@ -1,4 +1,6 @@
-small grids - should the cell be a neighbour of itself?
+- why is setTimeout needed in loop?
+- refactor life so it can be used as a performance test - how many frames/s can it run at?
+- small grids - should the cell be a neighbour of itself?
 
 Pathfinding project
     https://github.com/qiao/PathFinding.js
@@ -13,3 +15,13 @@ cell-fu
 
 cell-grid
 
+
+
+620ms to build 1000x1000 grid
+162ms to iterate over all cells, getting neighbours
+
+560ms to build 1000x1000 grid
+111ms to iterate over all cells, getting neighbours
+
+692ms to build 1000x1000 grid
+108ms to iterate over all cells, getting neighbours
