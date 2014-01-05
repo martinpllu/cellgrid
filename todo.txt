@@ -38,5 +38,6 @@ After making eachNeighbour loop a for loop:
     
     Also ran fast in the GUI from the start!!!!
     
+    
 
 
