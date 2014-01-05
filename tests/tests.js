@@ -115,9 +115,6 @@ function sampleElapsedTime(numSamples, sampleFunction) {
     return elapsedTime / numSamples;
 }
 
-
-
-
 function lifeFrameRateTest(size, numTicks) {
     var life = new Life(size, size),
         i,
