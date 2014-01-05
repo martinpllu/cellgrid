@@ -28,9 +28,9 @@ test("direction:randomDirection", function () {
     });
 });
 
-test("grid:getCell", function () {
+test("grid:cell", function () {
     var grid = new Grid(2, 2),
-        cell = grid.getCell(1, 0);
+        cell = grid.cell(1, 0);
     equal(cell.toString(), "(1,0)");
 });
 
@@ -49,15 +49,15 @@ test("grid:randomCell", function () {
 
 test("cell:neighbours", function () {
     var grid = new Grid(8, 8),
-        middleCell = grid.getCell(4, 4),
-        edgeCell = grid.getCell(0, 4);
+        middleCell = grid.cell(4, 4),
+        edgeCell = grid.cell(0, 4);
     equal(middleCell.neighbours.toString(), "(4,5),(5,5),(5,4),(5,3),(4,3),(3,3),(3,4),(3,5)");
     equal(edgeCell.neighbours.toString(), "(0,5),(1,5),(1,4),(1,3),(0,3),(7,3),(7,4),(7,5)");
 });
 
 test("cell:neighbourInDirection", function () {
     var grid = new Grid(8, 8),
-        edgeCell = grid.getCell(0, 4);
+        edgeCell = grid.cell(0, 4);
     equal(edgeCell.neighbour(Direction.NORTH).toString(), "(0,5)");
     equal(edgeCell.neighbour(Direction.NORTHEAST).toString(), "(1,5)");
     equal(edgeCell.neighbour(Direction.EAST).toString(), "(1,4)");
@@ -70,7 +70,7 @@ test("cell:neighbourInDirection", function () {
 
 test("cell:randomNeighbour", function () {
     var grid = new Grid(8, 8),
-        edgeCell = grid.getCell(0, 4),
+        edgeCell = grid.cell(0, 4),
         target = ["(0,5)", "(1,5)", "(1,4)", "(1,3)", "(0,3)", "(7,3)", "(7,4)", "(7,5)"];
     expectedValuesGenerated(1000, target, function () {
         return edgeCell.randomNeighbour().toString();
