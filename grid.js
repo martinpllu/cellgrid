@@ -37,6 +37,7 @@ Direction.randomDirection = function () {
 
 function Cell(grid, x, y) {
     this.grid = grid;
+    this.contents = [];
     this.x = x;
     this.y = y;
 }
@@ -58,7 +59,7 @@ Cell.prototype.initNeighbours = function () {
         } else if (ny === -1) {
             ny = this.grid.height - 1;
         }
-        neighbour = this.grid.getCell(nx, ny);
+        neighbour = this.grid.cells[nx][ny];
         this.neighbours[i] = neighbour;
     }
 };
@@ -73,6 +74,19 @@ Cell.prototype.randomNeighbour = function () {
 
 Cell.prototype.neighbour = function (direction) {
     return this.neighbours[direction.index];
+};
+
+Cell.prototype.add = function (o) {
+    this.contents.push(o);
+};
+
+Cell.prototype.remove = function (o) {
+    var index = this.contents.indexOf(o);
+    if (index !== -1) {
+        this.contents.splice(index, 1);
+        return true;
+    }
+    return false;
 };
 
 function Grid(width, height) {
@@ -102,9 +116,17 @@ function Grid(width, height) {
 Grid.prototype.randomCell = function () {
     var x = randomInt(this.width),
         y = randomInt(this.height);
-    return this.getCell(x, y);
+    return this.cells[x][y];
 };
 
-Grid.prototype.getCell = function (x, y) {
+Grid.prototype.cell = function (x, y) {
     return this.cells[x][y];
+};
+
+Grid.move = function (obj, fromCell, toCell) {
+    var removed = fromCell.remove(obj);
+    if (!removed) {
+        throw "Object not found in 'from' cell";
+    }
+    toCell.add(obj);
 };

@@ -1,4 +1,4 @@
-/*global GridDisplay,Grid,Loop,Color,Direction,Life,test,equal,ok,randomInt,deepEqual,expect,js_cols,console,QUnit*/
+/*global GridDisplay,Grid,Loop,Color,Direction,Life,Cell,test,equal,ok,throws,randomInt,deepEqual,expect,js_cols,console,QUnit*/
 /*jslint sloppy: true */
 /*jslint browser:true */
 /*jslint plusplus: true */
@@ -34,6 +34,34 @@ test("grid:cell", function () {
     equal(cell.toString(), "(1,0)");
 });
 
+test("grid:move", function () {
+    var grid = new Grid(2, 2),
+        cell1 = grid.cell(1, 0),
+        cell2 = grid.cell(1, 1),
+        obj = {
+            "foo": 1
+        };
+    cell1.add(obj);
+    deepEqual(cell1.contents, [obj]);
+    deepEqual(cell2.contents, []);
+    Grid.move(obj, cell1, cell2);
+    deepEqual(cell1.contents, []);
+    deepEqual(cell2.contents, [obj]);
+});
+
+test("grid:move:error", function () {
+    var grid = new Grid(2, 2),
+        cell1 = grid.cell(1, 0),
+        cell2 = grid.cell(1, 1),
+        obj = {
+            "foo": 1
+        };
+    throws(function () {
+        Grid.move(obj, cell1, cell2);
+    });
+
+});
+
 function testRandomCell(grid, targetArray) {
     expectedValuesGenerated(1000, targetArray, function () {
         return grid.randomCell().toString();
@@ -67,6 +95,42 @@ test("cell:neighbourInDirection", function () {
     equal(edgeCell.neighbour(Direction.WEST).toString(), "(7,4)");
     equal(edgeCell.neighbour(Direction.NORTHWEST).toString(), "(7,5)");
 });
+
+test("cell:neighbours", function () {
+    var grid = new Grid(8, 8),
+        middleCell = grid.cell(4, 4),
+        edgeCell = grid.cell(0, 4);
+    equal(middleCell.neighbours.toString(), "(4,5),(5,5),(5,4),(5,3),(4,3),(3,3),(3,4),(3,5)");
+    equal(edgeCell.neighbours.toString(), "(0,5),(1,5),(1,4),(1,3),(0,3),(7,3),(7,4),(7,5)");
+});
+
+test("cell:add", function () {
+    var cell = new Cell(),
+        obj1 = {
+            "foo": 3
+        },
+        obj2 = {
+            "bar": 4
+        };
+    cell.add(obj1);
+    cell.add(obj2);
+    deepEqual(cell.contents, [obj1, obj2]);
+});
+
+test("cell:remove", function () {
+    var cell = new Cell(),
+        obj1 = {
+            "foo": 3
+        },
+        obj2 = {
+            "bar": 4
+        };
+    cell.add(obj1);
+    cell.add(obj2);
+    cell.remove(obj1);
+    deepEqual(cell.contents, [obj2]);
+});
+
 
 test("cell:randomNeighbour", function () {
     var grid = new Grid(8, 8),
