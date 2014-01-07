@@ -1,15 +1,16 @@
-/*global GridDisplay,Grid,Loop,Color,Life,requestAnimationFrame*/
+/*global GridDisplay,Grid,Color,Life,requestAnimationFrame,cancelAnimationFrame*/
 /*jslint sloppy: true */
 /*jslint browser:true */
 /*jslint plusplus: true */
-
 
 var width = 500,
     height = 500,
     cellsize = 2,
     life = new Life(width, height),
     grid = life.grid,
-    display = new GridDisplay(cellsize, width, height);
+    display = new GridDisplay(cellsize, width, height),
+    animationId,
+    looping = true;
 
 function draw() {
     var cell,
@@ -24,8 +25,29 @@ function draw() {
             }
         }
     }
-    life.tick();
-    requestAnimationFrame(draw);
 }
 
-requestAnimationFrame(draw);
+function doTick() {
+    draw();
+    life.tick();
+    if (looping) {
+        animationId = requestAnimationFrame(doTick);
+    }
+}
+
+window.onkeyup = function (e) {
+    var key = e.keyCode || e.which;
+    if (key === 32) { // Space: toggle looping
+        if (looping) {
+            cancelAnimationFrame(animationId);
+        } else {
+            requestAnimationFrame(doTick);
+        }
+        looping = !looping;
+    }
+    if (key === 78 && !looping) { // n: Next frame if not looping
+        doTick();
+    }
+};
+
+requestAnimationFrame(doTick);
