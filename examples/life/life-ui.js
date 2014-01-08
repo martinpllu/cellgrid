@@ -9,7 +9,6 @@ var width = 500,
     life = new Life(width, height),
     grid = life.grid,
     display = new GridDisplay(cellsize, width, height),
-    animationId,
     looping = true;
 
 function draw() {
@@ -27,19 +26,17 @@ function doTick() {
     draw();
     life.tick();
     if (looping) {
-        animationId = requestAnimationFrame(doTick);
+        requestAnimationFrame(doTick);
     }
 }
 
 window.onkeyup = function (e) {
     var key = e.keyCode || e.which;
     if (key === 32) { // Space: toggle looping
+        looping = !looping;
         if (looping) {
-            cancelAnimationFrame(animationId);
-        } else {
             requestAnimationFrame(doTick);
         }
-        looping = !looping;
     }
     if (key === 78 && !looping) { // n: Next frame if not looping
         doTick();

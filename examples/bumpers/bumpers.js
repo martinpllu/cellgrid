@@ -10,12 +10,7 @@ function Bumper(cell) {
 }
 
 Bumper.prototype.tick = function () {
-    
-    // Need to store the bumpers in the cells so you can see if they are occupied
-    
-    var neighbours = this.cell.neighbours,
-        i,
-        target;
+    var neighbours = this.cell.neighbours, i, target;
     for (i = 0; i < neighbours.length; i++) {
         if (neighbours[i].contents.length !== 0) {
             this.direction = Direction.randomDirection();
@@ -30,10 +25,7 @@ Bumper.prototype.tick = function () {
 
 function BumperDisplay(gridsize, numBumpers, cellsize) {
     this.bumpers = [];
-    var i,
-        grid,
-        cell,
-        bumper;
+    var i, grid, cell, bumper;
     this.gridsize = gridsize;
     this.cellsize = cellsize;
     grid = new Grid(gridsize, gridsize);
@@ -62,5 +54,5 @@ BumperDisplay.prototype.start = function () {
     loop.start();
 };
 
-var bumperDisplay = new BumperDisplay(300, 100*100, 2);
+var bumperDisplay = new BumperDisplay(300, 100 * 100, 2);
 bumperDisplay.start();
