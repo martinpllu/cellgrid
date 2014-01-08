@@ -13,16 +13,12 @@ var width = 500,
     looping = true;
 
 function draw() {
-    var cell,
-        x,
-        y;
+    var cell, i;
     display.clear();
-    for (x = 0; x < width; x++) {
-        for (y = 0; y < height; y++) {
-            cell = grid.cells[x][y];
-            if (cell.state === 1) {
-                display.square(x, y, Color.GREEN);
-            }
+    for (i = 0; i < this.grid.numCells; i++) {
+        cell = this.grid.flatCells[i];
+        if (cell.state === 1) {
+            display.square(cell.x, cell.y, Color.GREEN);
         }
     }
 }

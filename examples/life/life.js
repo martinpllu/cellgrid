@@ -9,49 +9,37 @@ function Life(width, height) {
 }
 
 Life.prototype.init = function () {
-    var cell,
-        initState,
-        x,
-        y;
-    for (x = 0; x < this.grid.width; x++) {
-        for (y = 0; y < this.grid.height; y++) {
-            cell = this.grid.cells[x][y];
-            cell.state = Math.round(Math.random());
-        }
+    var cell, initState, i;
+    for (i = 0; i < this.grid.numCells; i++) {
+        cell = this.grid.flatCells[i];
+        cell.state = Math.round(Math.random());
     }
 };
 
 Life.prototype.tick = function () {
-    var x,
-        y,
-        cell,
-        n;
-    for (x = 0; x < this.grid.width; x++) {
-        for (y = 0; y < this.grid.height; y++) {
-            cell = this.grid.cells[x][y];
-            n = this.liveNeighbours(cell);
-            if (cell.state === 1) {
-                if (n < 2) {
-                    cell.nextState = 0;
-                } else if (n > 3) {
-                    cell.nextState = 0;
-                } else {
-                    cell.nextState = 1;
-                }
-            } else if (cell.state === 0) {
-                if (n === 3) {
-                    cell.nextState = 1;
-                } else {
-                    cell.nextState = 0;
-                }
+    var i, cell, n;
+    for (i = 0; i < this.grid.numCells; i++) {
+        cell = this.grid.flatCells[i];
+        n = this.liveNeighbours(cell);
+        if (cell.state === 1) {
+            if (n < 2) {
+                cell.nextState = 0;
+            } else if (n > 3) {
+                cell.nextState = 0;
+            } else {
+                cell.nextState = 1;
+            }
+        } else if (cell.state === 0) {
+            if (n === 3) {
+                cell.nextState = 1;
+            } else {
+                cell.nextState = 0;
             }
         }
     }
-    for (x = 0; x < this.grid.width; x++) {
-        for (y = 0; y < this.grid.height; y++) {
-            cell = this.grid.cells[x][y];
-            cell.state = cell.nextState;
-        }
+    for (i = 0; i < this.grid.numCells; i++) {
+        cell = this.grid.flatCells[i];
+        cell.state = cell.nextState;
     }
 };
 

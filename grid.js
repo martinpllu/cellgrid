@@ -91,11 +91,12 @@ Cell.prototype.remove = function (o) {
 
 function Grid(width, height) {
 
-    var x, y, column;
+    var x, y, column, cell;
 
     this.width = width;
     this.height = height;
-    this.cells = [];
+    this.cells = []; // 2D array of cells
+    this.flatCells = []; // Flat array of cells
 
     for (x = 0; x < width; x++) {
         column = [];
@@ -103,14 +104,15 @@ function Grid(width, height) {
     }
     for (x = 0; x < this.width; x++) {
         for (y = 0; y < this.height; y++) {
-            this.cells[x][y] = new Cell(this, x, y);
+            cell = new Cell(this, x, y);
+            this.cells[x][y] = cell;
+            this.flatCells.push(cell);
         }
     }
-    for (x = 0; x < this.width; x++) {
-        for (y = 0; y < this.height; y++) {
-            this.cells[x][y].initNeighbours();
-        }
+    for (x = 0; x < this.flatCells.length; x++) {
+        this.flatCells[x].initNeighbours();
     }
+    this.numCells = this.flatCells.length;
 }
 
 Grid.prototype.randomCell = function () {

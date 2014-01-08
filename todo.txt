@@ -1,5 +1,6 @@
-// TODO refactor GridDisplay ctr to just take Grid
-- can the display loop be flattened out and just listen at the end of each tick for keys pressed?
+- tidy up and rename bumpers
+- creation script
+- refactor GridDisplay ctr to just take Grid
 - small grids - should the cell be a neighbour of itself?
 
 Pathfinding project
