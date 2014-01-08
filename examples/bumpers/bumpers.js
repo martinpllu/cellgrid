@@ -1,7 +1,6 @@
-/*global Grid,Color,Direction,GridDisplay,Loop*/
+/*global Grid,Color,Direction,GridDisplay,Loop,requestAnimationFrame*/
 /*jslint sloppy: true */
 /*jslint plusplus: true */
-
 
 function Bumper(cell) {
     this.color = Color.randomColor();
@@ -10,7 +9,9 @@ function Bumper(cell) {
 }
 
 Bumper.prototype.tick = function () {
-    var neighbours = this.cell.neighbours, i, target;
+    var neighbours = this.cell.neighbours,
+        i,
+        target;
     for (i = 0; i < neighbours.length; i++) {
         if (neighbours[i].contents.length !== 0) {
             this.direction = Direction.randomDirection();
@@ -22,37 +23,37 @@ Bumper.prototype.tick = function () {
     this.cell = target;
 };
 
+var width = 500,
+    height = 500,
+    cellsize = 2,
+    display = new GridDisplay(cellsize, width, height),
+    looping = true,
+    grid = new Grid(width, height),
+    numBumpers = 10000,
+    bumpers = [];
 
-function BumperDisplay(gridsize, numBumpers, cellsize) {
-    this.bumpers = [];
-    var i, grid, cell, bumper;
-    this.gridsize = gridsize;
-    this.cellsize = cellsize;
-    grid = new Grid(gridsize, gridsize);
+function doTick() {
+    var i, bumper;
+    display.clear();
+    for (i = 0; i < bumpers.length; i++) {
+        bumper = bumpers[i];
+        display.square(bumper.cell.x, bumper.cell.y, bumper.color);
+    }
+    for (i = 0; i < bumpers.length; i++) {
+        bumpers[i].tick();
+    }
+    requestAnimationFrame(doTick);
+}
+
+function init() {
+    var i, cell, bumper;
     for (i = 0; i < numBumpers; i++) {
         cell = grid.randomCell();
         bumper = new Bumper(cell);
-        this.bumpers.push(bumper);
+        bumpers.push(bumper);
         cell.add(bumper);
     }
-    this.display = new GridDisplay(cellsize, grid.width, grid.height);
+    requestAnimationFrame(doTick);
 }
 
-BumperDisplay.prototype.start = function () {
-    var display = this,
-        loop = new Loop(this.delay, function () {
-            var i, bumper;
-            display.display.clear();
-            for (i = 0; i < display.bumpers.length; i++) {
-                bumper = display.bumpers[i];
-                display.display.square(bumper.cell.x, bumper.cell.y, bumper.color);
-            }
-            for (i = 0; i < display.bumpers.length; i++) {
-                display.bumpers[i].tick();
-            }
-        });
-    loop.start();
-};
-
-var bumperDisplay = new BumperDisplay(300, 100 * 100, 2);
-bumperDisplay.start();
+init();

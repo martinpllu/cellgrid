@@ -1,4 +1,4 @@
-- tidy up and rename bumpers
+- rename bumpers
 - creation script
 - refactor GridDisplay ctr to just take Grid
 - small grids - should the cell be a neighbour of itself?
