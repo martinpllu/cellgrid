@@ -121,23 +121,24 @@ function doTick() {
     }
 }
 
-window.onkeydown = function (e) {
-    //    console.log(e.keyCode)
-    var key = e.keyCode;
-    if (key === 80 || key === 38) { // 'p' or up arrow
-        hero.direction = Direction.SOUTH;
-    } else if (key === 186 || key === 40) { // ':' or down arrow
-        hero.direction = Direction.NORTH;
-    } else if (key === 76 || key === 37) { // 'l' or left arrow
+KeyboardController({
+    37: function() { 
         hero.direction = Direction.WEST;
-    } else if (key === 222 || key === 39) { // ' or right arrow
+        requestAnimationFrame(doTick);
+    },
+    38: function() { 
+        hero.direction = Direction.SOUTH;
+        requestAnimationFrame(doTick);
+    },
+    39: function() { 
         hero.direction = Direction.EAST;
-    } else {
-        hero.direction = null;
+        requestAnimationFrame(doTick);
+    },
+    40: function() { 
+        hero.direction = Direction.NORTH;
+        requestAnimationFrame(doTick);
     }
-    requestAnimationFrame(doTick);
-
-};
+}, 80);
 
 
 function init() {
@@ -163,3 +164,39 @@ function mixin(type, others) {
         }
     })
 }
+
+
+// See http://stackoverflow.com/questions/3691461/remove-key-press-delay-in-javascript
+
+function KeyboardController(keys, repeat) {
+    var timers= {};
+
+    document.onkeydown= function(event) {
+        var key= (event || window.event).keyCode;
+        if (!(key in keys))
+            return true;
+        if (!(key in timers)) {
+            timers[key]= null;
+            keys[key]();
+            if (repeat!==0)
+                timers[key]= setInterval(keys[key], repeat);
+        }
+        return false;
+    };
+
+    document.onkeyup= function(event) {
+        var key= (event || window.event).keyCode;
+        if (key in timers) {
+            if (timers[key]!==null)
+                clearInterval(timers[key]);
+            delete timers[key];
+        }
+    };
+
+    window.onblur= function() {
+        for (key in timers)
+            if (timers[key]!==null)
+                clearInterval(timers[key]);
+        timers= {};
+    };
+};
