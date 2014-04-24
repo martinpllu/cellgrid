@@ -31,7 +31,7 @@ Bumper.prototype.tick = function () {
     var target = this.cell.neighbour(this.direction);
     if (target.contents.length > 0) {
         subject = target.contents[0]
-        console.log('Subject now ' + subject.constructor.name)
+        console.log('Subject now ' + subject)
     }
     else {
         subject = null;
@@ -55,14 +55,16 @@ Brick.prototype.changeColor = function(color){
 
 mixin(Brick, [Thing])
 
-var width = 10,
-    height = 10,
-    cellsize = 8,
+var width = 20,
+    height = 20,
+    cellsize = 16,
     display = new GridDisplay(cellsize, width, height),
     grid = new Grid(width, height),
     things = [],
     bumper,
     subject;
+
+
 
 function doTick() {
     display.clear();
@@ -73,7 +75,15 @@ function doTick() {
     }
     for (i = 0; i < things.length; i++) {
         thing = things[i];
-        display.square(thing.cell.x, thing.cell.y, thing.color);
+        var color = thing.color
+        if (thing == subject){
+            var ctx = display.context;
+            ctx.strokeStyle="#FFFF00";
+            ctx.lineWidth = 4
+            ctx.strokeRect(thing.cell.x*cellsize, thing.cell.y*cellsize,cellsize,cellsize);
+            
+        }        
+        display.square(thing.cell.x, thing.cell.y, color);
     }
 
 }
