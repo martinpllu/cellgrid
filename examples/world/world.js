@@ -82,9 +82,9 @@ BrickLayer.prototype.postTick = function(){
         
 mixin(BrickLayer, [Thing])
 
-var width = 200,
-    height = 100,
-    cellsize = 4,
+var width = 100,
+    height = 50,
+    cellsize = 8,
     display = new GridDisplay(cellsize, width, height),
     grid = new Grid(width, height),
     things = [],
@@ -109,16 +109,16 @@ function doTick() {
     for (i = 0; i < things.length; i++) {
         thing = things[i];
         var color = thing.color
-        if (thing == subject) {
-            var ctx = display.context;
-            ctx.strokeStyle = "#FFFF00";
-            ctx.lineWidth = 4
-            ctx.strokeRect(thing.cell.x * cellsize, thing.cell.y * cellsize, cellsize, cellsize);
-
-        }
+        
         display.square(thing.cell.x, thing.cell.y, color);
     }
+    if (subject) {
+        var ctx = display.context;
+        ctx.strokeStyle = "#FFFF00";
+        ctx.lineWidth = 1
+        ctx.strokeRect(subject.cell.x * cellsize, subject.cell.y * cellsize, cellsize, cellsize);
 
+    }
 }
 
 window.onkeydown = function (e) {
