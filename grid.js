@@ -35,6 +35,11 @@ Direction.randomDirection = function () {
     return Direction.ALL[randomInt(8)];
 };
 
+
+Direction.randomRectDirection = function () {
+    return [Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST][randomInt(4)];
+};
+
 function Cell(grid, x, y) {
     this.grid = grid;
     this.contents = [];

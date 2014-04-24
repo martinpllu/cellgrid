@@ -4,10 +4,13 @@
 
 function Thing() {}
 
-Thing.prototype.initPosition = function () {
-    var cell = grid.randomCell();
+Thing.prototype.initPosition = function (cell) {
+    if (!cell){
+        cell = grid.randomCell();
+    }
     this.cell = cell;
     cell.add(this);
+    things.push(this)
 }
 
 Thing.prototype.tryToMove = function (direction) {
@@ -15,15 +18,17 @@ Thing.prototype.tryToMove = function (direction) {
     if (target.contents.length == 0) {
         Grid.move(this, this.cell, target);
         this.cell = target;
+        return true;
     }
+    return false;
 }
 
-function Bumper() {
+function Hero() {
     this.initPosition();
     this.color = Color.RED;
 }
 
-Bumper.prototype.tick = function () {
+Hero.prototype.tick = function () {
     if (!this.direction) {
         return;
     }
@@ -31,7 +36,7 @@ Bumper.prototype.tick = function () {
     
 };
 
-Bumper.prototype.postTick = function () {
+Hero.prototype.postTick = function () {
     if (!this.direction) {
         return;
     }
@@ -44,30 +49,46 @@ Bumper.prototype.postTick = function () {
     }
 }
 
-mixin(Bumper, [Thing])
+mixin(Hero, [Thing])
 
-function Brick() {
+function Brick(cell){
     this.color = Color.BLUE;
+    this.initPosition(cell);
+}
+
+mixin(Brick, [Thing]);
+
+function BrickLayer() {
+    this.width = randomInt(width/4)
+    this.color = Color.PURPLE;
     this.initPosition();
+    this.direction = Direction.randomRectDirection()
+    this.steps = 0;
 }
 
-Brick.prototype.tick = function () {
-    this.tryToMove(Direction.EAST)
+BrickLayer.prototype.tick = function () {
+    this.prevCell = this.cell
+    this.couldMove = this.tryToMove(this.direction)
+//    if (!this.couldMove){
+//        this.direction = Direction.randomRectDirection()
+//    }
 }
 
-Brick.prototype.changeColor = function (color) {
-    this.color = color;
+BrickLayer.prototype.postTick = function(){
+    if (this.couldMove){
+        new Brick(this.prevCell)
+    }
 }
+        
+mixin(BrickLayer, [Thing])
 
-mixin(Brick, [Thing])
-
-var width = 20,
-    height = 20,
-    cellsize = 16,
+var width = 200,
+    height = 100,
+    cellsize = 4,
     display = new GridDisplay(cellsize, width, height),
     grid = new Grid(width, height),
     things = [],
-    bumper,
+    hero,
     subject;
 
 
@@ -104,15 +125,15 @@ window.onkeydown = function (e) {
     //    console.log(e.keyCode)
     var key = e.keyCode;
     if (key === 80 || key === 38) { // 'p' or up arrow
-        bumper.direction = Direction.SOUTH;
+        hero.direction = Direction.SOUTH;
     } else if (key === 186 || key === 40) { // ':' or down arrow
-        bumper.direction = Direction.NORTH;
+        hero.direction = Direction.NORTH;
     } else if (key === 76 || key === 37) { // 'l' or left arrow
-        bumper.direction = Direction.WEST;
+        hero.direction = Direction.WEST;
     } else if (key === 222 || key === 39) { // ' or right arrow
-        bumper.direction = Direction.EAST;
+        hero.direction = Direction.EAST;
     } else {
-        bumper.direction = null;
+        hero.direction = null;
     }
     requestAnimationFrame(doTick);
 
@@ -120,10 +141,11 @@ window.onkeydown = function (e) {
 
 
 function init() {
-    bumper = new Bumper();
-    things.push(bumper);
-    things.push(new Brick());
+    hero = new Hero();
     requestAnimationFrame(doTick);
+    for (var i=0; i<((width*height)*0.005); i++){
+        new BrickLayer();
+    }
 }
 
 init();
