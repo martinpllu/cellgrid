@@ -2,8 +2,24 @@
 /*jslint sloppy: true */
 /*jslint plusplus: true */
 
+function Thing(){}
+
+Thing.prototype.initPosition = function(){
+    var cell = grid.randomCell();
+    this.cell = cell;
+    cell.add(this);
+}
+
+Thing.prototype.tryToMove = function(target){
+    var target = this.cell.neighbour(direction);
+    if (target.contents.length == 0) {
+        Grid.move(this, this.cell, target);
+        this.cell = target;
+    }
+}
+
 function Bumper() {
-    initPosition(this);
+    this.initPosition();
     this.color = Color.RED;
 }
 
@@ -18,22 +34,17 @@ Bumper.prototype.tick = function () {
     }
 };
 
+mixin(Bumper, [Thing])
+
 function Brick(cell) {
     this.color = Color.BLUE;
-    initPosition(this);
+    this.initPosition();
 }
-
-
-function initPosition(thing) {
-    var cell = grid.randomCell();
-    thing.cell = cell;
-    cell.add(thing);
-}
-
+mixin(Brick, [Thing])
 
 var width = 10,
     height = 10,
-    cellsize = 8,
+    cellsize = 40,
     display = new GridDisplay(cellsize, width, height),
     grid = new Grid(width, height),
     things = [],
@@ -80,3 +91,17 @@ function init() {
 }
 
 init();
+
+function mixin(type, others) {
+    if (!type.prototype.types) {
+        type.prototype.types = []
+    }
+    others.forEach(function (other) {
+        type.prototype.types.push(other)
+        for (field in other.prototype) {
+            if (other.prototype.hasOwnProperty(field)) {
+                type.prototype[field] = other.prototype[field]
+            }
+        }
+    })
+}
