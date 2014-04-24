@@ -2,15 +2,15 @@
 /*jslint sloppy: true */
 /*jslint plusplus: true */
 
-function Thing(){}
+function Thing() {}
 
-Thing.prototype.initPosition = function(){
+Thing.prototype.initPosition = function () {
     var cell = grid.randomCell();
     this.cell = cell;
     cell.add(this);
 }
 
-Thing.prototype.tryToMove = function(direction){
+Thing.prototype.tryToMove = function (direction) {
     var target = this.cell.neighbour(direction);
     if (target.contents.length == 0) {
         Grid.move(this, this.cell, target);
@@ -28,15 +28,21 @@ Bumper.prototype.tick = function () {
         return;
     }
     this.tryToMove(this.direction);
+    
+};
+
+Bumper.prototype.postTick = function () {
+    if (!this.direction) {
+        return;
+    }
     var target = this.cell.neighbour(this.direction);
     if (target.contents.length > 0) {
         subject = target.contents[0]
         console.log('Subject now ' + subject)
-    }
-    else {
+    } else {
         subject = null;
     }
-};
+}
 
 mixin(Bumper, [Thing])
 
@@ -45,11 +51,11 @@ function Brick() {
     this.initPosition();
 }
 
-Brick.prototype.tick = function(){
+Brick.prototype.tick = function () {
     this.tryToMove(Direction.EAST)
 }
 
-Brick.prototype.changeColor = function(color){
+Brick.prototype.changeColor = function (color) {
     this.color = color;
 }
 
@@ -74,15 +80,21 @@ function doTick() {
         }
     }
     for (i = 0; i < things.length; i++) {
+        if (typeof (things[i].postTick) == 'function') {
+            things[i].postTick();
+        }
+    }
+
+    for (i = 0; i < things.length; i++) {
         thing = things[i];
         var color = thing.color
-        if (thing == subject){
+        if (thing == subject) {
             var ctx = display.context;
-            ctx.strokeStyle="#FFFF00";
+            ctx.strokeStyle = "#FFFF00";
             ctx.lineWidth = 4
-            ctx.strokeRect(thing.cell.x*cellsize, thing.cell.y*cellsize,cellsize,cellsize);
-            
-        }        
+            ctx.strokeRect(thing.cell.x * cellsize, thing.cell.y * cellsize, cellsize, cellsize);
+
+        }
         display.square(thing.cell.x, thing.cell.y, color);
     }
 
