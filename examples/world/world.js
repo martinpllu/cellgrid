@@ -10,7 +10,7 @@ Thing.prototype.initPosition = function(){
     cell.add(this);
 }
 
-Thing.prototype.tryToMove = function(target){
+Thing.prototype.tryToMove = function(direction){
     var target = this.cell.neighbour(direction);
     if (target.contents.length == 0) {
         Grid.move(this, this.cell, target);
@@ -27,28 +27,42 @@ Bumper.prototype.tick = function () {
     if (!this.direction) {
         return;
     }
+    this.tryToMove(this.direction);
     var target = this.cell.neighbour(this.direction);
-    if (target.contents.length == 0) {
-        Grid.move(this, this.cell, target);
-        this.cell = target;
+    if (target.contents.length > 0) {
+        subject = target.contents[0]
+        console.log('Subject now ' + subject.constructor.name)
+    }
+    else {
+        subject = null;
     }
 };
 
 mixin(Bumper, [Thing])
 
-function Brick(cell) {
+function Brick() {
     this.color = Color.BLUE;
     this.initPosition();
 }
+
+Brick.prototype.tick = function(){
+    this.tryToMove(Direction.EAST)
+}
+
+Brick.prototype.changeColor = function(color){
+    this.color = color;
+}
+
 mixin(Brick, [Thing])
 
 var width = 10,
     height = 10,
-    cellsize = 40,
+    cellsize = 8,
     display = new GridDisplay(cellsize, width, height),
     grid = new Grid(width, height),
     things = [],
-    bumper;
+    bumper,
+    subject;
 
 function doTick() {
     display.clear();
