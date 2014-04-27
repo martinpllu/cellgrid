@@ -5,7 +5,7 @@
 function Thing() {}
 
 Thing.prototype.initPosition = function (cell) {
-    if (!cell){
+    if (!cell) {
         cell = grid.randomCell();
     }
     this.cell = cell;
@@ -33,7 +33,7 @@ Hero.prototype.tick = function () {
         return;
     }
     this.tryToMove(this.direction);
-    
+
 };
 
 Hero.prototype.postTick = function () {
@@ -43,7 +43,7 @@ Hero.prototype.postTick = function () {
     var target = this.cell.neighbour(this.direction);
     if (target.contents.length > 0) {
         subject = target.contents[0]
-        console.log('Subject now ' + subject)
+        console.log('Subject now ' + subject.constructor.name)
     } else {
         subject = null;
     }
@@ -51,7 +51,7 @@ Hero.prototype.postTick = function () {
 
 mixin(Hero, [Thing])
 
-function Brick(cell){
+function Brick(cell) {
     this.color = Color.BLUE;
     this.initPosition(cell);
 }
@@ -59,7 +59,7 @@ function Brick(cell){
 mixin(Brick, [Thing]);
 
 function BrickLayer() {
-    this.width = randomInt(width/4)
+    this.width = randomInt(width / 4)
     this.color = Color.PURPLE;
     this.initPosition();
     this.direction = Direction.randomRectDirection()
@@ -69,17 +69,17 @@ function BrickLayer() {
 BrickLayer.prototype.tick = function () {
     this.prevCell = this.cell
     this.couldMove = this.tryToMove(this.direction)
-//    if (!this.couldMove){
-//        this.direction = Direction.randomRectDirection()
-//    }
+    //    if (!this.couldMove){
+    //        this.direction = Direction.randomRectDirection()
+    //    }
 }
 
-BrickLayer.prototype.postTick = function(){
-    if (this.couldMove){
+BrickLayer.prototype.postTick = function () {
+    if (this.couldMove) {
         new Brick(this.prevCell)
     }
 }
-        
+
 mixin(BrickLayer, [Thing])
 
 var width = 100,
@@ -109,7 +109,7 @@ function doTick() {
     for (i = 0; i < things.length; i++) {
         thing = things[i];
         var color = thing.color
-        
+
         display.square(thing.cell.x, thing.cell.y, color);
     }
     if (subject) {
@@ -122,29 +122,29 @@ function doTick() {
 }
 
 KeyboardController({
-    37: function() { 
+    37: function () {
         hero.direction = Direction.WEST;
         requestAnimationFrame(doTick);
     },
-    38: function() { 
+    38: function () {
         hero.direction = Direction.SOUTH;
         requestAnimationFrame(doTick);
     },
-    39: function() { 
+    39: function () {
         hero.direction = Direction.EAST;
         requestAnimationFrame(doTick);
     },
-    40: function() { 
+    40: function () {
         hero.direction = Direction.NORTH;
         requestAnimationFrame(doTick);
     }
-}, 80);
+}, 100);
 
 
 function init() {
     hero = new Hero();
     requestAnimationFrame(doTick);
-    for (var i=0; i<((width*height)*0.005); i++){
+    for (var i = 0; i < ((width * height) * 0.005); i++) {
         new BrickLayer();
     }
 }
@@ -169,34 +169,34 @@ function mixin(type, others) {
 // See http://stackoverflow.com/questions/3691461/remove-key-press-delay-in-javascript
 
 function KeyboardController(keys, repeat) {
-    var timers= {};
+    var timers = {};
 
-    document.onkeydown= function(event) {
-        var key= (event || window.event).keyCode;
+    document.onkeydown = function (event) {
+        var key = (event || window.event).keyCode;
         if (!(key in keys))
             return true;
         if (!(key in timers)) {
-            timers[key]= null;
+            timers[key] = null;
             keys[key]();
-            if (repeat!==0)
-                timers[key]= setInterval(keys[key], repeat);
+            if (repeat !== 0)
+                timers[key] = setInterval(keys[key], repeat);
         }
         return false;
     };
 
-    document.onkeyup= function(event) {
-        var key= (event || window.event).keyCode;
+    document.onkeyup = function (event) {
+        var key = (event || window.event).keyCode;
         if (key in timers) {
-            if (timers[key]!==null)
+            if (timers[key] !== null)
                 clearInterval(timers[key]);
             delete timers[key];
         }
     };
 
-    window.onblur= function() {
+    window.onblur = function () {
         for (key in timers)
-            if (timers[key]!==null)
+            if (timers[key] !== null)
                 clearInterval(timers[key]);
-        timers= {};
+        timers = {};
     };
 };
