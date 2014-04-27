@@ -4,6 +4,9 @@
 
 function Thing() {}
 
+function Carrier(){}
+Carrier.prototype.carrying = [];
+
 Thing.prototype.initPosition = function (cell) {
     if (!cell) {
         cell = grid.randomCell();
@@ -21,6 +24,13 @@ Thing.prototype.tryToMove = function (direction) {
         return true;
     }
     return false;
+}
+
+function Carryable() {}
+Carryable.prototype.pickup = function(mob){
+    this.cell.remove(this);
+    this.cell = null;
+    mob.carrying.push(this)
 }
 
 function Hero() {
@@ -49,14 +59,16 @@ Hero.prototype.postTick = function () {
     }
 }
 
-mixin(Hero, [Thing])
+mixin(Hero, [Thing, Carrier])
+
+
 
 function Brick(cell) {
     this.color = Color.BLUE;
     this.initPosition(cell);
 }
 
-mixin(Brick, [Thing]);
+mixin(Brick, [Thing, Carryable]);
 
 function BrickLayer() {
     this.width = randomInt(width / 4)
@@ -108,9 +120,10 @@ function doTick() {
 
     for (i = 0; i < things.length; i++) {
         thing = things[i];
-        var color = thing.color
-
-        display.square(thing.cell.x, thing.cell.y, color);
+        if (thing.cell){
+            var color = thing.color
+            display.square(thing.cell.x, thing.cell.y, color);
+        }
     }
     if (subject) {
         var ctx = display.context;
