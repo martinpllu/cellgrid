@@ -35,7 +35,7 @@ Carryable.prototype.pickup = function(mob){
 
 function Hero() {
     this.initPosition();
-    this.color = Color.RED;
+    this.color = Color.YELLOW;
 }
 
 Hero.prototype.tick = function () {
@@ -64,7 +64,7 @@ mixin(Hero, [Thing, Carrier])
 
 
 function Brick(cell) {
-    this.color = Color.BLUE;
+    this.color = Color.GREEN;
     this.initPosition(cell);
 }
 
@@ -80,10 +80,8 @@ function BrickLayer() {
 
 BrickLayer.prototype.tick = function () {
     this.prevCell = this.cell
+    this.direction = Direction.randomRectDirection();
     this.couldMove = this.tryToMove(this.direction)
-    //    if (!this.couldMove){
-    //        this.direction = Direction.randomRectDirection()
-    //    }
 }
 
 BrickLayer.prototype.postTick = function () {
@@ -95,8 +93,8 @@ BrickLayer.prototype.postTick = function () {
 mixin(BrickLayer, [Thing])
 
 var width = 100,
-    height = 50,
-    cellsize = 8,
+    height = 100,
+    cellsize = 10,
     display = new GridDisplay(cellsize, width, height),
     grid = new Grid(width, height),
     things = [],
@@ -157,9 +155,9 @@ KeyboardController({
 function init() {
     hero = new Hero();
     requestAnimationFrame(doTick);
-    for (var i = 0; i < ((width * height) * 0.005); i++) {
-        new BrickLayer();
-    }
+//    for (var i = 0; i < ((width * height) * 0.01); i++) {
+//        new BrickLayer();
+//    }
 }
 
 init();
