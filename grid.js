@@ -12,6 +12,10 @@ function Direction(x, y, index, id) {
     this.id = id;
 }
 
+Direction.prototype.toString = function(){
+    return this.id;
+}
+
 Direction.NORTH = new Direction(0, 1, 0, "NORTH");
 Direction.NORTHEAST = new Direction(1, 1, 1, "NORTHEAST");
 Direction.EAST = new Direction(1, 0, 2, "EAST");
