@@ -2,10 +2,15 @@
 /*jslint sloppy: true */
 /*jslint plusplus: true */
 
-
 function Ant(cell) {
     this.cell = cell;
-    this.color = Color.randomColor();
+    //this.color = Color.randomColor();
+    if (randomInt(100) < 30){
+        this.color = Color.WHITE
+    }
+    else {
+        this.color = Color.GREY
+    }
     this.direction = Direction.randomDirection();
 }
 
@@ -28,22 +33,20 @@ var verySimpleMove = function (neighbours, direction) {
     };
 }
 
-
 Action = {
     MOVE: 0,
     EAT: 1
 }
 
-
 var x = function () {
 
-    var width = 200,
-        height = 200,
-        cellsize = 5,
+    var width = 150,
+        height = 150,
+        cellsize = 3,
         display = new GridDisplay(cellsize, width, height),
         looping = true,
         grid = new Grid(width, height),
-        population = 5000,
+        population = (width * height) / 2,
         ants = [];
 
     function doTick() {

@@ -10,6 +10,7 @@ Color.BLACK = "#000000";
 Color.WHITE = "#FFFFFF";
 Color.YELLOW = "#FFFF00";
 Color.PURPLE = "#FF00FF";
+Color.GREY = "#666";
 
 Color.randomColor = function () {
     // From http://www.paulirish.com/2009/random-hex-color-code-snippets/

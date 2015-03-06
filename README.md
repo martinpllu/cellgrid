@@ -1,5 +1,9 @@
 A Javascript library for working with 2D grids - useful for simulations, cellular automata, simple games etc.
 
+### Demo
+
+[Conway's Game Of Life](https://cdn.rawgit.com/martinpllu/cellgrid/master/examples/life/life.html)
+
 ### Grids
 
 Grids consist of a M by N matrix of square cells, where each cell has 8 neighbours.
