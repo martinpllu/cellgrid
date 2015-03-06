@@ -3,8 +3,8 @@
 /*jslint browser:true */
 /*jslint plusplus: true */
 
-var width = 500,
-    height = 500,
+var width = 300,
+    height = 300,
     cellsize = 2,
     life = new Life(width, height),
     grid = life.grid,
